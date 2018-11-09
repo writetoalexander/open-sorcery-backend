@@ -1,5 +1,7 @@
-var passport = require("passport");
-var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
+const keys = require('./keys.js');
+const User = require('../database');
 
 passport.serializeUser(function(user, done) {
 	done(null, user);
@@ -12,17 +14,23 @@ passport.deserializeUser(function(user, done) {
 passport.use(
 	new GoogleStrategy(
 		{
-			clientID: "GOOGLE_CLIENT_ID",
-			clientSecret: "GOOGLE_CLIENT_SECRET",
+			clientID: keys.google.clientID,
+			clientSecret: keys.google.clientSecret,
 			callbackURL: "http://localhost:4500/auth/google/callback"
 		},
 		function(accessToken, refreshToken, profile, done) {
-			var userData = {
-				email: profile.emails[0].value,
-				name: profile.displayName,
-				token: accessToken
-			};
-			done(null, userData);
+			let usrObj = new User({
+				userID: profile.id,
+				userName: profile.displayName
+			});
+			User.findOne({userID: profile.id}, (err, res) => {
+				if(!res) {
+					usrObj.save(console.log('saving ', usrObj.userName));
+				} else {
+					console.log('user already present');
+				}
+			});
+			done(null, usrObj);
 		}
 	)
 );

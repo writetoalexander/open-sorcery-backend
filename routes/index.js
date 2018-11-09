@@ -4,12 +4,14 @@ var passport = require("passport");
 
 /* GET home page. */
 router.get("/", function(req, res, next) {
+  console.log('gethappening')
 	res.render("index", { title: "Express" });
 });
 
 /* GET Google Authentication API. */
 router.get(
 	"/auth/google",
+
 	passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
