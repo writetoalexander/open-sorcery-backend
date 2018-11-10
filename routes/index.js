@@ -1,26 +1,31 @@
-var express = require("express");
+var express = require('express');
 var router = express.Router();
-var passport = require("passport");
+var passport = require('passport');
 
 /* GET home page. */
-router.get("/", function(req, res, next) {
+router.get('/', function(req, res, next) {
   console.log('gethappening')
-	res.render("index", { title: "Express" });
+	res.render('index', { title: 'Express' });
 });
 
 /* GET Google Authentication API. */
 router.get(
-	"/auth/google",
+	'/auth/google',
 
-	passport.authenticate("google", { scope: ["profile", "email"] })
+	passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
+router.get('/logout', function(req, res, next){
+	console.log('auth logout reached')
+  req.logOut();
+  res.redirect('/');
+});
 router.get(
-	"/auth/google/callback",
-	passport.authenticate("google", { failureRedirect: "/", session: false }),
+	'/auth/google/callback',
+	passport.authenticate('google', { failureRedirect: '/', session: false }),
 	function(req, res) {
 		var token = req.user.token;
-		res.redirect("http://localhost:3000?token=" + token);
+		res.redirect('http://localhost:3000?token=' + token);
 	}
 );
 

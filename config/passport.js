@@ -27,7 +27,7 @@ passport.use(
 				if(!res) {
 					usrObj.save(console.log('saving ', usrObj.userName));
 				} else {
-					console.log('user already present');
+					console.log('user present');
 				}
 			});
 			done(null, usrObj);
