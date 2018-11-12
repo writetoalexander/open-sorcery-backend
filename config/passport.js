@@ -1,5 +1,6 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
+const GitHubStrategy = require('passport-github2');
 const keys = require('./keys.js');
 const User = require('../database');
 
@@ -11,15 +12,15 @@ passport.deserializeUser(function(user, done) {
 	done(null, user);
 });
 
-passport.use(
-	new GoogleStrategy(
-		{
-			clientID: keys.google.clientID,
-			clientSecret: keys.google.clientSecret,
-			callbackURL: "http://localhost:4500/auth/google/callback"
-		},
-		function(accessToken, refreshToken, profile, done) {
-			let usrObj = new User({
+
+
+passport.use(new GitHubStrategy({
+    clientID: keys.github.clientID,
+    clientSecret: keys.github.clientSecret,
+    callbackURL: "http://localhost:4500/auth/github/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    let usrObj = new User({
 				userID: profile.id,
 				userName: profile.displayName
 			});
@@ -31,6 +32,15 @@ passport.use(
 				}
 			});
 			done(null, usrObj);
-		}
-	)
-);
+  }
+));
+
+
+
+
+
+
+
+
+
+
