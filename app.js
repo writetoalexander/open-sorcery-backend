@@ -7,6 +7,7 @@ const passport = require('passport');
 const db = require('./database');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const apiRouter = require('./routes/api');
 const cors = require('cors');
 
 const app = express();
@@ -26,6 +27,7 @@ app.use(passport.initialize());
 require('./config/passport');
 
 app.use('/', indexRouter);
+app.use('/github', apiRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
