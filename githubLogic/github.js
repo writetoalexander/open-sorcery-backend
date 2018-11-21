@@ -5,34 +5,19 @@ const github = require('octonode');
 let client = github.client();
 
 module.exports = {
-  searchRepos: (query) => {
-  //   try {
-  //     let params = {
-  //       q: query,
-  //       client_secret: keys.github.clientSecret
-  //     };
-  //     let results = await axios.get('https://api.github.com/search/repositories', params);
-  //   } catch(err) {
-  //     console.log('err is ', err.response.data);
-  //     return;
-  //   }
-
-
-  // }
-    let params = {
-      q: query,
-      sort: 'stars',
-      order: 'asc'
-
-    };
-    return client.get('/search/repositories', params, (err, status, body, headers) => {
-      if (err) {
-        console.log('err is  ', err)
-      } else {
-        //console.log('response is ', body);
-      }
-
-    });
-
+  searchRepos: async (query) => {
+      let params = {
+        q: query
+      };
+      let results;
+      await client.get('https://api.github.com/search/repositories', params, (err, status, body, header) => {
+        if (err) {
+          console.log('err is ', err);
+          return;
+        } else {
+          results = body
+        }
+      });
+      return results;
   }
 };
