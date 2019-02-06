@@ -20,6 +20,13 @@ passport.use(new GitHubStrategy({
     callbackURL: "http://localhost:4500/auth/github/callback"
   },
   function(accessToken, refreshToken, profile, done) {
+		console.log('inside passport.use access is ', accessToken);
+		console.log('inside passport.use refresh is ', refreshToken);
+    let userData = {
+      name: profile.displayName,
+      token: accessToken,
+      refresh: refreshToken
+    };
     let usrObj = new User({
 				userID: profile.id,
 				userName: profile.displayName
@@ -28,10 +35,10 @@ passport.use(new GitHubStrategy({
 				if(!res) {
 					usrObj.save(console.log('saving ', usrObj.userName));
 				} else {
-					console.log('user present');
+					console.log('user is present ', usrObj);
 				}
 			});
-			done(null, usrObj);
+			done(null, userData);
   }
 ));
 
